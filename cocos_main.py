@@ -99,6 +99,8 @@ class cocos_box2d_layer( cocos.layer.Layer ):
 
         # load the image
         self.image = pyglet.resource.image('grossini.png')
+        self.image_sister1 = pyglet.resource.image('grossinis_sister1.png')
+        self.image_sister2 = pyglet.resource.image('grossinis_sister2.png')
 
         # get image size
         x,y = 200, 200 # self.image.width, self.image.height
@@ -133,11 +135,20 @@ class cocos_box2d_layer( cocos.layer.Layer ):
         bodies = self.world.GetBodyList()
         i = 0
         for b in bodies:
-            sprite = b.GetUserData()
+            userdata = b.GetUserData()
+            if not userdata:
+                userdata = {}
+                b.SetUserData(userdata)
+            sprite = userdata.get("sprite")
             if not sprite:
-                sprite = Sprite(self.image)
+                if userdata.get("sister1"):
+                    sprite = Sprite(self.image_sister1)
+                elif userdata.get("sister2"):
+                    sprite = Sprite(self.image_sister2)
+                else:
+                    sprite = Sprite(self.image)
                 self.add(sprite)
-                b.SetUserData(sprite)
+                userdata["sprite"] = sprite
 
             sprite.position = (b.position.x * self.zoom), (b.position.y * self.zoom)
             degrees = (b.GetAngle() * 180) / math.pi

@@ -69,6 +69,7 @@ class SliderCrank (Framework):
         body = self.world.CreateBody(bd)
         body.CreateShape(sd)
         body.SetMassFromShapes()
+        body.SetUserData({"sister1": True})
 
         rjd.Initialize(prevBody, body, (0.0, 9.0))
         rjd.enableMotor = False
@@ -82,6 +83,7 @@ class SliderCrank (Framework):
         body = self.world.CreateBody(bd)
         body.CreateShape(sd)
         body.SetMassFromShapes()
+        body.SetUserData({"sister2": True})
 
         rjd.Initialize(prevBody, body, (0.0, 17.0))
         self.world.CreateJoint(rjd)
